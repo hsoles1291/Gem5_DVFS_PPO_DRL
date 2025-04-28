@@ -111,9 +111,8 @@ The project explores ML-driven DVFS strategies in simulated heterogeneous comput
 
 ## Author
 
-**Heiner Solis Esquivel**  
-Master's Candidate in Modern Manufacturing Systems  
-Focus Area: Microelectronics and Energy Efficiency  
+Heiner Solis Esquivel
+Focus Area: Microelectronics
 GitHub: [hsoles1291](https://github.com/hsoles1291)
 
 ---
