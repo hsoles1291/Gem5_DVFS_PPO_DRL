@@ -1,0 +1,73 @@
+#!/bin/bash
+
+echo "=== Starting Sequential OceanC Benchmarks in Background ==="
+
+# Function to run benchmarks sequentially
+run_benchmark() {
+    local benchmark_path="$1"
+    local benchmark_cmd="$2"
+    local benchmark_name="$3"
+    local log_file="Benchmark_Log.txt"
+
+    # Start time (remove leading zeros using base conversion with 10#)
+    local start_time=$(($(date +%s%N | sed 's/^0*//')))
+
+    echo "[DEBUG] Starting $benchmark_name at $(date)" | tee -a "$log_file"
+
+    # Navigate to the benchmark path
+    cd "$benchmark_path" || { echo "Failed to change directory to $benchmark_path"; exit 1; }
+
+    # Run the benchmark command in the background
+    eval "$benchmark_cmd" &
+    local benchmark_pid=$!
+
+    echo "[DEBUG] Benchmark '$benchmark_name' PID: $benchmark_pid" | tee -a "$log_file"
+
+    # Monitor benchmark progress
+    while kill -0 $benchmark_pid 2>/dev/null; do
+        echo "[DEBUG] Benchmark '$benchmark_name' still running (PID: $benchmark_pid)..." | tee -a "$log_file"
+        sleep 0.01
+    done
+
+    # End time (remove leading zeros using base conversion with 10#)
+    local end_time=$(($(date +%s%N | sed 's/^0*//')))
+    local duration=$((10#$end_time - 10#$start_time))
+
+    # Human-readable timestamps
+    local start_time_human=$(date -d @$((10#$start_time / 1000000000)) +"%Y-%m-%d %H:%M:%S")
+    local end_time_human=$(date -d @$((10#$end_time / 1000000000)) +"%Y-%m-%d %H:%M:%S")
+
+    # Log completion
+    echo "[DEBUG] $benchmark_name completed at $(date)" | tee -a "$log_file"
+    echo "[SUCCESS] $benchmark_name completed." | tee -a "$log_file"
+    echo "$benchmark_name Start Time: $start_time_human" >> "$log_file"
+    echo "$benchmark_name End Time: $end_time_human" >> "$log_file"
+    echo "$benchmark_name Duration: $duration ns" >> "$log_file"
+
+    # Save the log file back to the host
+    /sbin/m5 writefile "$log_file" "Benchmark_Log_Out.txt"
+}
+
+# Define the benchmark path and command
+benchmark_path="/Splash-3/codes/apps/ocean/contiguous_partitions"
+benchmark_cmd="./OCEAN -p4 -n258"
+
+# Set Governor Type
+echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+
+# Run the OceanC benchmark 5 times
+for i in {1..5}; do
+    run_benchmark "$benchmark_path" "$benchmark_cmd" "OceanC Benchmark - Iteration $i"
+    sleep 1  # Delay for 1 second between benchmarks
+done
+
+echo "=== All OceanC Benchmarks Completed Successfully ==="
+
+# Optional checkpoint for state saving
+echo "[DEBUG] Saving checkpoint..."
+/sbin/m5 checkpoint
+echo "Checkpoint saved. End of rcS script."
+/sbin/m5 exit

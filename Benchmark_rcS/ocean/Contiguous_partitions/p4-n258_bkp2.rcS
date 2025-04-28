@@ -1,0 +1,238 @@
+#!/bin/bash
+
+#source /root/.bashrc
+#echo "bootscript.rcS is running"
+
+# Trigger an immediate checkpoint at the next sync (by passing a non-zero
+# delay param to m5 ckpt)
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO USERSPACE #"
+echo "########################################"
+echo "userspace" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo "##############################"
+echo "# AVAILABLE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_avail_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+echo "cpu1_avail_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/scaling_available_frequencies
+echo "cpu2_avail_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/scaling_available_frequencies
+echo "cpu3_avail_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_available_frequencies
+echo ""
+echo "##############################"
+echo "# CURRENT USERSPACE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+/sbin/m5 checkpoint 1
+
+
+echo ""
+echo "###########################"
+echo "#USERSPACE 'OCEANC' BENCHMARK 1 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO USERSPACE #"
+echo "########################################"
+echo ""
+echo "userspace" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT USERSPACE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+echo "#####################################"
+echo "# STARTING USERSPACE 'OCEANC' BENCHMARK 2 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/ocean/contiguous_partitions
+start_time=$(($(date +%s%N)))
+./OCEAN -p4 -n258 &
+BENCHMARK_PID=$!  # Capture process ID
+# Wait for the benchmark process to complete
+wait $BENCHMARK_PID
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #2 OCEANC USERSPACE: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #2 OCEANC USERSPACE: $end_time_human"
+duration=$((end_time - start_time))
+echo "OCEANC USERSPACE Run#2 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#USERSPACE 'OCEANC' BENCHMARK 2 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO USERSPACE #"
+echo "########################################"
+echo ""
+echo "userspace" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT USERSPACE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+echo "#####################################"
+echo "# STARTING USERSPACE 'OCEANC' BENCHMARK 3 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/ocean/contiguous_partitions
+start_time=$(($(date +%s%N)))
+./OCEAN -p4 -n258 &
+BENCHMARK_PID=$!  # Capture process ID
+# Wait for the benchmark process to complete
+wait $BENCHMARK_PID
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #3 OCEANC USERSPACE: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #3 OCEANC USERSPACE: $end_time_human"
+duration=$((end_time - start_time))
+echo "OCEANC USERSPACE Run#3 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#USERSPACE 'OCEANC' BENCHMARK 3 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO USERSPACE #"
+echo "########################################"
+echo ""
+echo "userspace" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT USERSPACE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+echo "#####################################"
+echo "# STARTING USERSPACE 'OCEANC' BENCHMARK 4 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/ocean/contiguous_partitions
+start_time=$(($(date +%s%N)))
+./OCEAN -p4 -n258 &
+BENCHMARK_PID=$!  # Capture process ID
+# Wait for the benchmark process to complete
+wait $BENCHMARK_PID
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #4 OCEANC USERSPACE: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #4 OCEANC USERSPACE: $end_time_human"
+duration=$((end_time - start_time))
+echo "OCEANC USERSPACE Run#4 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#USERSPACE 'OCEANC' BENCHMARK 4 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO USERSPACE #"
+echo "########################################"
+echo ""
+echo "userspace" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "userspace" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT USERSPACE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+echo "#####################################"
+echo "# STARTING USERSPACE 'OCEANC' BENCHMARK 5 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/ocean/contiguous_partitions
+start_time=$(($(date +%s%N)))
+./OCEAN -p4 -n258 &
+BENCHMARK_PID=$!  # Capture process ID
+# Wait for the benchmark process to complete
+wait $BENCHMARK_PID
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #5 OCEANC USERSPACE: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #5 OCEANC USERSPACE: $end_time_human"
+duration=$((end_time - start_time))
+echo "OCEANC USERSPACE Run#5 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#USERSPACE 'OCEANC' BENCHMARK 5 DONE #"
+echo "###########################"
+echo ""
+echo ""
+echo "########################################"
+echo "# SETTING BACK SCALING GOVERNOR TO ONDEMAND #"
+echo "########################################"
+echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+sleep 2
+/sbin/m5 checkpoint 1
+echo "########################################"
+echo "# END OCEANC EXIT SIM NOW     #"
+echo "########################################"
+m5 exit

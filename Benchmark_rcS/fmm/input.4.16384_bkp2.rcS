@@ -1,0 +1,287 @@
+#!/bin/bash
+
+#source /root/.bashrc
+#echo "bootscript.rcS is running"
+
+# Trigger an immediate checkpoint at the next sync (by passing a non-zero
+# delay param to m5 ckpt)
+sleep 1
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO ONDEMAND #"
+echo "########################################"
+echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo "##############################"
+echo "# AVAILABLE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_avail_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/scaling_available_frequencies
+echo "cpu1_avail_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/scaling_available_frequencies
+echo "cpu2_avail_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/scaling_available_frequencies
+echo "cpu3_avail_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/scaling_available_frequencies
+echo ""
+echo "##############################"
+echo "# CURRENT ONDEMAND CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+/sbin/m5 checkpoint 1
+sleep 1
+echo "#####################################"
+echo "# STARTING ONDEMAND 'FMM' BENCHMARK 1 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/fmm
+start_time=$(($(date +%s%N)))
+./FMM < ./inputs/input.4.16384
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #1 FMM ONDEMAND: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #1 FMM ONDEMAND: $end_time_human"
+duration=$((end_time - start_time))
+echo "FMM ONDEMAND Run#1 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#ONDEMAND 'FMM' BENCHMARK 1 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO PERFORMANCE #"
+echo "########################################"
+echo ""
+echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "performance" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "performance" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "performance" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT PERFORMANCE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+sleep 1
+echo "#####################################"
+echo "# STARTING PERFORMANCE 'FMM' BENCHMARK 2 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/fmm
+start_time=$(($(date +%s%N)))
+./FMM < ./inputs/input.4.16384
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #2 FMM PERFORMANCE: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #2 FMM PERFORMANCE: $end_time_human"
+duration=$((end_time - start_time))
+echo "FMM PERFORMANCE Run#2 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#PERFORMANCE 'FMM' BENCHMARK 2 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO POWERSAVE #"
+echo "########################################"
+echo ""
+echo "powersave" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "powersave" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "powersave" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "powersave" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT POWERSAVE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+sleep 1
+echo "#####################################"
+echo "# STARTING POWERSAVE 'FMM' BENCHMARK 3 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/fmm
+start_time=$(($(date +%s%N)))
+./FMM < ./inputs/input.4.16384
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #3 FMM POWERSAVE: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #3 FMM POWERSAVE: $end_time_human"
+duration=$((end_time - start_time))
+echo "FMM POWERSAVE Run#3 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#POWERSAVE 'FMM' BENCHMARK 3 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO ONDEMAND #"
+echo "########################################"
+echo ""
+echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT ONDEMAND CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+sleep 1
+echo "#####################################"
+echo "# STARTING ONDEMAND 'FMM' BENCHMARK 4 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/fmm
+start_time=$(($(date +%s%N)))
+./FMM < ./inputs/input.4.16384
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #4 FMM ONDEMAND: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #4 FMM ONDEMAND: $end_time_human"
+duration=$((end_time - start_time))
+echo "FMM ONDEMAND Run#4 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#ONDEMAND 'FMM' BENCHMARK 4 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO PERFORMANCE #"
+echo "########################################"
+echo ""
+echo "performance" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "performance" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "performance" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "performance" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT PERFORMANCE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+sleep 1
+echo "#####################################"
+echo "# STARTING PERFORMANCE 'FMM' BENCHMARK 5 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/fmm
+start_time=$(($(date +%s%N)))
+./FMM < ./inputs/input.4.16384
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #5 FMM PERFORMANCE: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #5 FMM PERFORMANCE: $end_time_human"
+duration=$((end_time - start_time))
+echo "FMM PERFORMANCE Run#5 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#PERFORMANCE 'FMM' BENCHMARK 5 DONE #"
+echo "###########################"
+echo ""
+echo "########################################"
+echo "# SETTING SCALING GOVERNOR TO POWERSAVE #"
+echo "########################################"
+echo ""
+echo "powersave" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "powersave" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "powersave" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "powersave" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+echo ""
+echo "##############################"
+echo "# CURRENT POWERSAVE CPU FREQUENCIES  #"
+echo "##############################"
+echo ""
+echo "cpu0_cur_freq"
+cat /sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_cur_freq
+echo "cpu1_cur_freq"
+cat /sys/devices/system/cpu/cpu1/cpufreq/cpuinfo_cur_freq
+echo "cpu2_cur_freq"
+cat /sys/devices/system/cpu/cpu2/cpufreq/cpuinfo_cur_freq
+echo "cpu3_cur_freq"
+cat /sys/devices/system/cpu/cpu3/cpufreq/cpuinfo_cur_freq
+echo ""
+sleep 1
+echo "#####################################"
+echo "# STARTING POWERSAVE 'FMM' BENCHMARK 6 #"
+echo "#####################################"
+cd /Splash-3/codes/apps/fmm
+start_time=$(($(date +%s%N)))
+./FMM < ./inputs/input.4.16384
+end_time=$(($(date +%s%N)))
+start_time_human=$(date -d @$((start_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark Start Run #6 FMM POWERSAVE: $start_time_human"
+end_time_human=$(date -d @$((end_time / 1000)) +"%Y-%m-%d %H:%M:%S.%3N")
+echo "Benchmark End Run #6 FMM POWERSAVE: $end_time_human"
+duration=$((end_time - start_time))
+echo "FMM POWERSAVE Run#6 Duration: $duration ns"
+
+echo ""
+echo "###########################"
+echo "#POWERSAVE 'FMM' BENCHMARK 6 DONE #"
+echo "###########################"
+echo ""
+sleep 1
+echo ""
+echo "########################################"
+echo "# SETTING BACK SCALING GOVERNOR TO ONDEMAND #"
+echo "########################################"
+echo "ondemand" > /sys/devices/system/cpu/cpu0/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu1/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu2/cpufreq/scaling_governor
+echo "ondemand" > /sys/devices/system/cpu/cpu3/cpufreq/scaling_governor
+sleep 2
+/sbin/m5 checkpoint 1
+echo "########################################"
+echo "# END FMM EXIT SIM NOW     #"
+echo "########################################"
+m5 exit
