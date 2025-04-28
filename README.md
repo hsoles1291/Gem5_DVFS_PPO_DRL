@@ -1,119 +1,96 @@
 Gem5_DVFS_PPO_DRL
 Adaptive Dynamic Voltage and Frequency Scaling (DVFS) Optimization using Proximal Policy Optimization (PPO) in Gem5 Simulations
 
-📚 Project Overview
+Project Overview
 This project integrates Dynamic Voltage and Frequency Scaling (DVFS) with Deep Reinforcement Learning (PPO algorithm) in the Gem5 simulator environment.
-The goal is to intelligently optimize power consumption and performance in heterogeneous multicore systems by dynamically adjusting CPU frequencies based on workload characteristics.
+The goal is to optimize power consumption and performance in heterogeneous multicore systems by dynamically adjusting CPU frequencies based on workload characteristics.
 
 This work is part of a Master's thesis focused on energy efficiency in modern computing architectures.
 
-🛠️ Repository Structure
-Benchmark_rcS/ – Custom rcS scripts to automate the execution of benchmarks inside the simulated Ubuntu environment.
+Repository Structure
+Benchmark_rcS/ – Custom rcS scripts to automate benchmark execution inside the simulated Ubuntu environment.
 
 Gem5_Collaterals/DTB/ – Device Tree Binary (DTB) files and kernel collaterals customized for DVFS control.
 
-Main_Script/ – Python scripts managing the environment simulation, parsing stats, and coordinating PPO model interactions.
+Main_Script/ – Python scripts managing environment simulation, parsing stats, and PPO interactions.
 
-PPO_Model/ – Implementation of the PPO Deep Reinforcement Learning model adapted for real-time decision-making on DVFS.
+PPO_Model/ – Implementation of the PPO Deep Reinforcement Learning model.
 
-Run_Shells/ – Shell scripts to launch Gem5 simulations with proper environment settings.
+Run_Shells/ – Shell scripts to launch Gem5 simulations.
 
-README.md – Project description and instructions (this file).
+README.md – Project description and usage instructions.
 
-⚙️ Main Features
-Full-System Gem5 Simulation with Ubuntu OS booted and DVFS enabled.
+Main Features
+Full-system simulation in Gem5 with Ubuntu and DVFS enabled.
 
-Real-time PPO Agent that receives system signals and controls CPU frequencies.
+Real-time PPO agent that controls CPU frequencies.
 
-Custom Benchmark Automation using Splash-3 workloads.
+Automated benchmark execution using Splash-3 workloads.
 
-Dynamic Adaptation based on system load to optimize energy and performance.
+Dynamic adaptation based on system load for energy/performance optimization.
 
-Custom Power Modeling using Gemstone power model extensions.
+Power modeling using Gemstone extensions.
 
-🚀 Quickstart
-Clone the repository:
-
-bash
-Copy
-Edit
-git clone https://github.com/hsoles1291/Gem5_DVFS_PPO_DRL.git
-cd Gem5_DVFS_PPO_DRL
 Set up Gem5:
 
-Ensure you have a working Gem5 full-system simulation environment (ARM architecture recommended).
+Ensure a working Gem5 full-system simulation environment (ARM architecture recommended).
 
 Kernel must support DVFS and userspace frequency scaling.
 
 Prepare the environment:
 
-Place your kernel and disk images in the appropriate paths.
+Place the kernel and disk images accordingly.
 
-Update paths in Run_Shells/ scripts if necessary.
+Update any paths inside Run_Shells/ scripts if needed.
 
-Train or Load PPO Model:
+Train or load PPO model:
 
-The PPO agent will train automatically if no pretrained model is found.
+The PPO agent trains automatically if no model is found.
 
-Trained models are stored in PPO_Model/.
+Trained models are saved under PPO_Model/.
 
-Run the Simulation:
 
-bash
-Copy
-Edit
-bash Run_Shells/run_gem5.sh
-(Adjust script if needed for your specific benchmarks.)
+PPO Model Overview
 
-🧠 PPO Model Overview
-State Space: Selected system metrics including CPU frequency, voltage, power estimations, cache behavior, and memory access patterns.
+State space: Selected system metrics including CPU frequency, voltage, power estimations, cache behavior, and memory access patterns.
 
-Action Space: Frequency scaling actions for each voltage/frequency domain (big and little clusters).
+Action space: Frequency scaling actions for each voltage/frequency domain (big and little clusters).
 
-Reward Function: Optimizes a trade-off between minimizing dynamic power consumption and maintaining acceptable performance levels.
+Reward function: Balances minimizing dynamic power consumption and maintaining system performance.
 
-🖥️ System Architecture Overview
-Here’s a simple high-level flow:
-
-pgsql
-Copy
-Edit
 Gem5 Simulator (Ubuntu + DVFS enabled)
         ↓
 Gem5 generates system statistics (stats.txt)
         ↓
-Main Python Script reads stats and processes signals
+Main Python Script processes stats and generates signals
         ↓
-PPO Model decides frequency scaling actions
+PPO Model predicts scaling actions
         ↓
 Action commands written to shared files
         ↓
-rcS scripts inside Ubuntu apply new CPU frequencies
+rcS scripts apply new CPU frequencies inside Ubuntu
         ↓
-Cycle repeats until the end of the benchmark
-This cycle enables adaptive, intelligent frequency management based on real-time system load.
-
-📋 Requirements
-Gem5 (with DVFS and ARM big.LITTLE simulation support)
+Cycle repeats until benchmark completion
+Requirements
+Gem5 simulator (with DVFS and ARM big.LITTLE support)
 
 Python 3.8+
 
-PyTorch (for PPO model training and inference)
+PyTorch
 
 Numpy
 
-Matplotlib (optional, for plotting performance)
+Matplotlib (optional, for performance plots)
 
-📑 Thesis Context
-This repository is part of the research for the Master's thesis:
+Thesis Context
+This repository supports the research for the Master's thesis:
 "Escalado Dinámico de Voltaje y Frecuencia (DVFS) Adaptativo impulsado por Aprendizaje Automático para Sistemas Heterogéneos Multinúcleo en Gem5."
 
-The work demonstrates the feasibility of integrating AI-based DVFS strategies in simulation environments, contributing to the development of energy-efficient computing architectures.
+The project explores ML-driven DVFS strategies in simulated heterogeneous computing systems.
 
-👤 Author
+Author
 Heiner Solis Esquivel
-Focus Area: Microelectronics and Energy Efficiency
+Focus Area: Microelectronics
 
-📜 License
-This project is licensed under the MIT License — feel free to use, modify, and build upon it with attribution.
-
+License
+This project is licensed under the MIT License.
