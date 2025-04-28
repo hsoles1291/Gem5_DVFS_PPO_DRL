@@ -112,9 +112,7 @@ The work demonstrates the feasibility of integrating AI-based DVFS strategies in
 
 👤 Author
 Heiner Solis Esquivel
-Master's Candidate in Modern Manufacturing Systems
 Focus Area: Microelectronics and Energy Efficiency
-GitHub: hsoles1291
 
 📜 License
 This project is licensed under the MIT License — feel free to use, modify, and build upon it with attribution.
